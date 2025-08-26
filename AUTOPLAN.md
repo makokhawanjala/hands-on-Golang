@@ -1,0 +1,30 @@
+# AUTOPLAN — 30 Day Checklist
+
+- [ ] Day 1: Toolchain + basics → `day01/calc-cli`
+- [ ] Day 2: Control flow + data → `day02/`
+- [ ] Day 3: Functions & pointers → `day03/`
+- [ ] Day 4: Structs/Interfaces/Generics → `day04/`
+- [ ] Day 5: Errors/Panic/Defer → `day05/`
+- [ ] Day 6: Stdlib batteries → `day06/`
+- [ ] Day 7: Testing/Benchmarking/Profiling → improve Days 1–6
+- [ ] Day 8: Goroutines & channels I
+- [ ] Day 9: Channels II + select + timeouts
+- [ ] Day10: Sync + worker pool
+- [ ] Day11: Context everywhere
+- [ ] Day12: HTTP Server & Client
+- [ ] Day13: CLI & Config
+- [ ] Day14: Mini-project Log Aggregator
+- [ ] Day15: Gin fundamentals
+- [ ] Day16: PostgreSQL (pgx/sqlx)
+- [ ] Day17: Auth & Security
+- [ ] Day18: Redis & caching
+- [ ] Day19: WebSockets realtime
+- [ ] Day20: gRPC intro
+- [ ] Day21: Service hardening
+- [ ] Day22: Observability
+- [ ] Day23: Containers & release
+- [ ] Day24: Queues & events
+- [ ] Day25: Performance & load
+- [ ] Day26: Security pass
+- [ ] Day27–29: Capstone build
+- [ ] Day30: Polish & publish
