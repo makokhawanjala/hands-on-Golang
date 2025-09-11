@@ -1,3 +1,3 @@
-module github.com/makokhawanjala/go-30days
+module github.com/makokhawanjala/hands-on-Golang
 
-go 1.22
+go 1.21
