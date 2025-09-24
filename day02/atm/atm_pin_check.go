@@ -7,12 +7,13 @@ import (
 )
 
 func main() {
-	// seed random generator
-	// Using deprecated rand.Seed for compatibility
-	rand.Seed(time.Now().UnixNano())
+	// Use modern random source (Go 1.20+)
+	// For older Go versions, you can use the deprecated rand.Seed
+	source := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(source)
 
 	// Generate random 4-digit PIN
-	correctPIN := fmt.Sprintf("%04d", rand.Intn(10000))
+	correctPIN := fmt.Sprintf("%04d", r.Intn(10000))
 	fmt.Println("[DEBUG] Today's PIN is:", correctPIN)
 
 	var enteredPIN string

@@ -13,8 +13,11 @@ func main() {
 	for {
 		// First number
 		var input string
-		fmt.Print("Enter first number (or 'exit'):")
-		fmt.Scanln(&input)
+		fmt.Print("Enter first number (or 'exit'): ")
+		if _, err := fmt.Scanln(&input); err != nil {
+			fmt.Println("Error reading input:", err)
+			continue
+		}
 
 		if strings.ToLower(input) == "exit" {
 			fmt.Println("Goodbye")
@@ -27,9 +30,12 @@ func main() {
 			continue
 		}
 
-		// second number
-		fmt.Print("Enter second number (Or 'exit'):")
-		fmt.Scanln(&input)
+		// Second number
+		fmt.Print("Enter second number (or 'exit'): ")
+		if _, err := fmt.Scanln(&input); err != nil {
+			fmt.Println("Error reading input:", err)
+			continue
+		}
 
 		if strings.ToLower(input) == "exit" {
 			fmt.Println("Goodbye")
@@ -43,13 +49,16 @@ func main() {
 		}
 
 		// Operator
-		fmt.Print("Enter operation (+,-,*,/):")
+		fmt.Print("Enter operation (+, -, *, /): ")
 		var op string
-		fmt.Scanln(&op)
+		if _, err := fmt.Scanln(&op); err != nil {
+			fmt.Println("Error reading operation:", err)
+			continue
+		}
 
 		result, err := calculate(num1, num2, op)
 		if err != nil {
-			fmt.Println("Error", err)
+			fmt.Println("Error:", err)
 		} else {
 			fmt.Printf("Result: %.2f\n", result)
 		}
@@ -62,10 +71,8 @@ func calculate(num1, num2 float64, op string) (float64, error) {
 		return num1 + num2, nil
 	case "-":
 		return num1 - num2, nil
-
 	case "*":
 		return num1 * num2, nil
-
 	case "/":
 		if num2 == 0 {
 			return 0, fmt.Errorf("cannot divide by zero")
@@ -74,5 +81,4 @@ func calculate(num1, num2 float64, op string) (float64, error) {
 	default:
 		return 0, fmt.Errorf("invalid operator: %s", op)
 	}
-
 }
