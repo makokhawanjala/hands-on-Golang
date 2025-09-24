@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["go"]
+
+[phases.build]
+cmds = ["cd day03/party && go build -o main ."]
+
+[start]
+cmd = "cd day03/party && ./main"
