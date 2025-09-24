@@ -1,0 +1,12 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "cd day03/party && go build -o ../../app .",
+    "watchPatterns": ["day03/party/**"]
+  },
+  "deploy": {
+    "startCommand": "./app",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 100
+  }
+}

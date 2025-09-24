@@ -2,7 +2,7 @@
 nixPkgs = ["go"]
 
 [phases.build]
-cmds = ["cd day03/party && go build -o main ."]
+cmds = ["cd day03/party && go build -o ../../out ."]
 
 [start]
-cmd = "cd day03/party && ./main"
+cmd = "./out"
