@@ -4,14 +4,11 @@ FROM golang:1.23-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy go mod files
-COPY day03/party/go.mod day03/party/go.sum ./
-
-# Download dependencies
-RUN go mod download
-
 # Copy source code
 COPY day03/party/ ./
+
+# Download dependencies (if any)
+RUN go mod download
 
 # Build the application
 RUN go build -ldflags="-w -s" -o out .
@@ -30,6 +27,9 @@ WORKDIR /app
 
 # Copy the binary from builder stage
 COPY --from=builder /app/out .
+
+# Copy static files (HTML templates)
+COPY --from=builder /app/*.html ./
 
 # Change ownership to non-root user
 RUN chown -R appuser:appuser /app
