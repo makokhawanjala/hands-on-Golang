@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"os"
 )
 
 // Define a struct to group a set of related values
@@ -126,10 +127,17 @@ func main() {
 	http.HandleFunc("/form", formHandler) // RSVP form
 	http.HandleFunc("/health", healthHandler)
 
-	// Start the web server on port 5000
-	err := http.ListenAndServe(":5000", nil)
+	// Get port from Railway environment variable
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5000" // fallback for local development
+	}
+
+	// Start the web server on the Railway-provided port
+	fmt.Printf("Starting server on port %s\n", port)
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		// Print any errors if the server fails to start
-		fmt.Println(err)
+		fmt.Println("Server failed to start:", err)
 	}
 }
