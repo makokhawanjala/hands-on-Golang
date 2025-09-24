@@ -1,160 +1,129 @@
-// Package main is the entry point for our web application
 package main
 
-// Import necessary packages for our web server
 import (
-	"fmt"           // For printing to console and string formatting
-	"html/template" // For parsing and executing HTML templates
-	"net/http"      // For creating HTTP server and handling requests
-	"os"            // For reading environment variables
+	"fmt"
+	"html/template"
+	"net/http"
 )
 
-// Define a struct to represent an RSVP response
-// Structs in Go group related data together
+// Define a struct to group a set of related values
+// This holds all the info we need for each person's RSVP
 type Rsvp struct {
-	Name, Email, Phone string // Guest's contact information
-	WillAttend         bool   // Whether the guest will attend (must be capitalized to be exported/accessible from templates)
+	Name, Email, Phone string
+	WillAttend         bool // Changed from willAttend to WillAttend (exported)
 }
 
-// Global variables to store our application data
-// In a real application, you'd use a database instead of in-memory storage
-var responses = make([]*Rsvp, 0, 10)                   // Slice to store RSVP responses (initially empty, capacity of 10)
-var templates = make(map[string]*template.Template, 3) // Map to cache parsed templates for better performance
+// Initialize a new slice with make function
+// and give it initial size and capacity
+// This will store all the RSVP responses we receive
+var responses = make([]*Rsvp, 0, 10)
 
-// loadTemplates function reads and parses all HTML template files
-// This is called once at startup to avoid parsing templates on every request
+// This map will hold our HTML templates so we can reuse them
+var templates = make(map[string]*template.Template, 3)
+
+// Load all the HTML templates from files
 func loadTemplates() {
-	// Array of template names that correspond to our HTML files
+	// Array of template names that match our HTML files
 	templateNames := [5]string{"welcome", "form", "thanks", "sorry", "list"}
-
 	// Loop through each template name
 	for index, name := range templateNames {
-		// ParseFiles reads the layout.html (base template) and the specific template file
-		// layout.html contains the common HTML structure, individual files define the "body" block
+		// Try to parse the layout.html and the specific template file
 		t, err := template.ParseFiles("layout.html", name+".html")
-
-		// Check if parsing was successful
 		if err == nil {
-			// Store the parsed template in our map for later use
+			// If successful, store the template in our map
 			templates[name] = t
-			fmt.Println("Loaded template", index, name) // Debug output to console
+			fmt.Println("Loaded template", index, name)
 		} else {
-			// If template parsing fails, crash the program (panic)
-			// This ensures we catch template errors at startup, not during user requests
+			// If there's an error, crash the program
 			panic(err)
 		}
 	}
 }
 
-// welcomeHandler serves the welcome page (home page)
-// HTTP handlers in Go take a ResponseWriter (to send response) and Request (incoming request data)
+// Handle requests to the home page
 func welcomeHandler(writer http.ResponseWriter, request *http.Request) {
-	// Execute the welcome template and send it to the client
-	// The second parameter (nil) means we're not passing any data to the template
+	// Execute the welcome template and send it to the browser
 	templates["welcome"].Execute(writer, nil)
 }
 
-// listHandler shows the list of people who are attending the party
+// Handle requests to view all RSVP responses
 func listHandler(writer http.ResponseWriter, request *http.Request) {
-	// Execute the list template and pass our responses slice as data
-	// The template will loop through this data to display attendees
+	// Execute the list template and pass it all the responses we've collected
 	templates["list"].Execute(writer, responses)
 }
 
-// formData struct is used to pass both RSVP data and validation errors to the form template
+// Struct to hold form data and any validation errors
 type formData struct {
-	*Rsvp           // Embedded struct - includes Name, Email, Phone, WillAttend fields
-	Errors []string // Slice of error messages to display to the user
+	*Rsvp           // Embed the Rsvp struct
+	Errors []string // Slice to hold error messages
 }
 
-// formHandler handles both displaying the RSVP form (GET) and processing submissions (POST)
+// Handle both showing the form and processing form submissions
 func formHandler(writer http.ResponseWriter, request *http.Request) {
-	// Check the HTTP method to determine what to do
 	if request.Method == http.MethodGet {
-		// GET request: Show empty form
+		// If it's a GET request, show the empty form
 		templates["form"].Execute(writer, formData{
-			Rsvp: &Rsvp{}, Errors: []string{}, // Empty RSVP data and no errors
+			Rsvp: &Rsvp{}, Errors: []string{},
 		})
 	} else if request.Method == http.MethodPost {
-		// POST request: Process form submission
+		// If it's a POST request, process the form data
+		request.ParseForm() // Parse the form data from the request
 
-		// ParseForm() parses the form data from the request body
-		// This populates request.Form with the submitted values
-		request.ParseForm()
-
-		// Safely extract form values with existence and length checks
-		// This prevents "index out of range" panics if fields are missing or empty
-
-		name := ""
-		if vals, exists := request.Form["name"]; exists && len(vals) > 0 {
-			name = vals[0] // Take the first value (forms can have multiple values for same name)
-		}
-
-		email := ""
-		if vals, exists := request.Form["email"]; exists && len(vals) > 0 {
-			email = vals[0]
-		}
-
-		phone := ""
-		if vals, exists := request.Form["phone"]; exists && len(vals) > 0 {
-			phone = vals[0]
-		}
-
-		// Handle the attendance dropdown (willattend field)
-		willAttend := false
-		if vals, exists := request.Form["willattend"]; exists && len(vals) > 0 {
-			// Convert string "true" to boolean true, anything else becomes false
-			willAttend = vals[0] == "true"
-		}
-
-		// Create a new RSVP struct with the extracted values
+		// Create a new Rsvp struct with the form data
 		responseData := Rsvp{
-			Name:       name,
-			Email:      email,
-			Phone:      phone,
-			WillAttend: willAttend,
+			Name:       request.Form["name"][0],
+			Email:      request.Form["email"][0],
+			Phone:      request.Form["phone"][0],
+			WillAttend: request.Form["willAttend"][0] == "true", // Convert string to boolean
 		}
 
-		// Add the response to our global responses slice
-		// In a real app, this would be saved to a database
-		responses = append(responses, &responseData)
+		// Check for validation errors
+		errors := []string{}
+		if responseData.Name == "" {
+			errors = append(errors, "Please Enter your name")
+		}
+		if responseData.Email == "" {
+			errors = append(errors, "Please enter your email address")
+		}
+		if responseData.Phone == "" {
+			errors = append(errors, "Please enter your phone number")
+		}
 
-		// Show different thank you pages based on attendance choice
-		if responseData.WillAttend {
-			// Guest is attending - show thanks page with their name
-			templates["thanks"].Execute(writer, responseData.Name)
+		if len(errors) > 0 {
+			// If there are errors, show the form again with error messages
+			templates["form"].Execute(writer, formData{
+				Rsvp: &responseData, Errors: errors,
+			})
 		} else {
-			// Guest is not attending - show sorry page with their name
-			templates["sorry"].Execute(writer, responseData.Name)
+			// If no errors, save the response and show appropriate thank you page
+			responses = append(responses, &responseData)
+			if responseData.WillAttend {
+				// Show thanks page if they're attending
+				templates["thanks"].Execute(writer, responseData.Name)
+			} else {
+				// Show sorry page if they're not attending
+				templates["sorry"].Execute(writer, responseData.Name)
+			}
+
 		}
+
 	}
 }
 
-// main function is the entry point of our program
+// Main function - entry point of the program
 func main() {
-	// Load and parse all templates at startup
+	// Load all the HTML templates first
 	loadTemplates()
 
-	// Set up HTTP routes - map URL patterns to handler functions
+	// Set up URL routes and their corresponding handler functions
 	http.HandleFunc("/", welcomeHandler)  // Home page
-	http.HandleFunc("/list", listHandler) // Attendee list page
-	http.HandleFunc("/form", formHandler) // RSVP form page
+	http.HandleFunc("/list", listHandler) // View all responses
+	http.HandleFunc("/form", formHandler) // RSVP form
 
-	// Determine which port to run the server on
-	// Cloud platforms set the PORT environment variable, locally we default to 5000
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "5000" // Default port for local development
-	}
-
-	// Print startup message to console
-	fmt.Printf("Server starting on port %s\n", port)
-
-	// Start the HTTP server and listen for incoming requests
-	// ListenAndServe blocks here - the program will run until interrupted
-	err := http.ListenAndServe(":"+port, nil)
+	// Start the web server on port 5000
+	err := http.ListenAndServe(":5000", nil)
 	if err != nil {
-		// If server fails to start, print the error
+		// Print any errors if the server fails to start
 		fmt.Println(err)
 	}
 }
