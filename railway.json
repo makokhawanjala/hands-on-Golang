@@ -1,4 +1,8 @@
 {
-  "build": "go build -o out ./day03/party",
-  "start": "./out"
+  "build": {
+    "command": "go build -o out ./day03/party"
+  },
+  "start": {
+    "command": "./out"
+  }
 }
