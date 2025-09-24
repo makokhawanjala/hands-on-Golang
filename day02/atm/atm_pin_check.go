@@ -8,6 +8,7 @@ import (
 
 func main() {
 	// seed random generator
+	// Using deprecated rand.Seed for compatibility
 	rand.Seed(time.Now().UnixNano())
 
 	// Generate random 4-digit PIN
@@ -18,25 +19,34 @@ func main() {
 	attempts := 0
 
 	// User enters a PIN
-	// If correct ---> show Acess granted
+	// If correct ---> show Access granted
 	// If wrong ---> Allow Retry
 	// After 3 wrong attempts ---> "Card Blocked"
 	for attempts < 3 {
 		fmt.Print("Enter your 4-digit PIN: ")
-		fmt.Scanln(&enteredPIN)
+		if _, err := fmt.Scanln(&enteredPIN); err != nil {
+			fmt.Println("Error reading PIN:", err)
+			continue
+		}
 
 		if enteredPIN == correctPIN {
 			fmt.Println("Access granted. Welcome to your account.")
 
 			// Give option to change pin
-			fmt.Print("Do you want to change your PIN? (yes/no):")
+			fmt.Print("Do you want to change your PIN? (yes/no): ")
 			var choice string
-			fmt.Scanln(&choice)
+			if _, err := fmt.Scanln(&choice); err != nil {
+				fmt.Println("Error reading choice:", err)
+				return
+			}
 
 			if choice == "yes" {
 				var newPIN string
 				fmt.Print("Enter your new 4-digit PIN: ")
-				fmt.Scanln(&newPIN)
+				if _, err := fmt.Scanln(&newPIN); err != nil {
+					fmt.Println("Error reading new PIN:", err)
+					return
+				}
 				correctPIN = newPIN
 				fmt.Println("PIN successfully changed! Your new PIN is set.")
 				fmt.Printf("[DEBUG] New PIN is now: %s\n", correctPIN)

@@ -19,7 +19,7 @@ func MustGet(url string) string {
 
 	// Ensure response body is closed when function exits
 	// This prevents memory leaks
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	// Read entire response body into memory
 	body, err := io.ReadAll(resp.Body)
@@ -45,7 +45,7 @@ func SafeGet(url string) (string, error) {
 	}
 
 	// CRITICAL: Always close the response body
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	// Check if the HTTP status is successful (200-299)
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
@@ -85,7 +85,7 @@ func GetWithHeaders(url string, headers map[string]string) (string, error) {
 		return "", fmt.Errorf("failed to execute request: %w", err)
 	}
 
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	// Check status code
 	if resp.StatusCode != http.StatusOK {
