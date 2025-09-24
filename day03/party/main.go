@@ -35,7 +35,8 @@ func loadTemplates() {
 			fmt.Println("Loaded template", index, name)
 		} else {
 			// If there's an error, crash the program
-			panic(err)
+			// panic(err)
+			fmt.Printf("Failed to load template %s: %v\n", name, err)
 		}
 	}
 }
@@ -110,6 +111,10 @@ func formHandler(writer http.ResponseWriter, request *http.Request) {
 	}
 }
 
+func healthHandler(writer http.ResponseWriter, request *http.Request) {
+	fmt.Fprintf(writer, "OK - Server is running")
+}
+
 // Main function - entry point of the program
 func main() {
 	// Load all the HTML templates first
@@ -119,6 +124,7 @@ func main() {
 	http.HandleFunc("/", welcomeHandler)  // Home page
 	http.HandleFunc("/list", listHandler) // View all responses
 	http.HandleFunc("/form", formHandler) // RSVP form
+	http.HandleFunc("/health", healthHandler)
 
 	// Start the web server on port 5000
 	err := http.ListenAndServe(":5000", nil)
