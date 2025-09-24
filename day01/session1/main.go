@@ -13,13 +13,20 @@ import (
 func readNonEmptyLine(prompt string) string {
 	in := bufio.NewReader(os.Stdin)
 	fmt.Print(prompt + " ")
-	text, _ := in.ReadString('\n')
+	text, err := in.ReadString('\n')
+	if err != nil {
+		fmt.Println("Error reading input:", err)
+		return ""
+	}
 	text = strings.TrimSpace(text)
-
 	if text == "" {
 		fmt.Println("Oops, that was empty-try once more.")
 		fmt.Print(prompt + " ")
-		text, _ = in.ReadString('\n')
+		text, err = in.ReadString('\n')
+		if err != nil {
+			fmt.Println("Error reading input:", err)
+			return ""
+		}
 		text = strings.TrimSpace(text)
 	}
 	return text
@@ -28,12 +35,10 @@ func readNonEmptyLine(prompt string) string {
 func main() {
 	// 1) prompt clearly
 	name := readNonEmptyLine("What's your name?")
-
 	// 2) Graceful fallback if still empty after retry
 	if name == "" {
 		name = "friend"
 	}
-
 	// 3) Respond with formatted output
 	fmt.Printf("Nice to meet you, %s!\n", name)
 	fmt.Println("Welcome to Go-small steps, clean code, daily gains")
