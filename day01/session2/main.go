@@ -7,15 +7,18 @@ import (
 
 // Accepts a name from the CLI, process it and output it in a clear format
 func main() {
-	println("Enter your name:")
+	fmt.Println("Enter your name:") // Use fmt.Println instead of println for consistency
 	var name string
-	fmt.Scanln(&name)
+
+	if _, err := fmt.Scanln(&name); err != nil {
+		fmt.Println("Error reading input:", err)
+		return
+	}
 
 	name = strings.TrimSpace(name)
 	if name == "" {
 		name = "friend"
 	}
 
-	fmt.Printf("Hello, %s", name)
-
+	fmt.Printf("Hello, %s\n", name) // Added newline for better output formatting
 }
