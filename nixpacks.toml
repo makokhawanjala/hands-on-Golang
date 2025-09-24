@@ -1,5 +1,8 @@
 [phases.setup]
-nixPkgs = ["go"]
+nixPkgs = ["go_1_23"]
+
+[phases.install]
+cmds = ["cd day03/party && go mod download"]
 
 [phases.build]
 cmds = ["cd day03/party && go build -o ../../out ."]

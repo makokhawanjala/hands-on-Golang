@@ -1,3 +1,3 @@
 module github.com/makokhawanjala/hands-on-Golang
 
-go 1.25
+go 1.23
