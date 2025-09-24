@@ -22,25 +22,36 @@ func main() {
 		var name, email, phone, attending string
 
 		fmt.Print("Enter your name (or type 'exit' to quit): ")
-		fmt.Scanln(&name)
+		if _, err := fmt.Scanln(&name); err != nil {
+			fmt.Println("Error reading name:", err)
+			continue
+		}
 
 		if name == "exit" {
 			break
 		}
 
 		fmt.Print("Enter your email: ")
-		fmt.Scanln(&email)
+		if _, err := fmt.Scanln(&email); err != nil {
+			fmt.Println("Error reading email:", err)
+			continue
+		}
 
 		fmt.Print("Enter your phone: ")
-		fmt.Scanln(&phone)
+		if _, err := fmt.Scanln(&phone); err != nil {
+			fmt.Println("Error reading phone:", err)
+			continue
+		}
 
 		fmt.Print("Will you attend? (yes/no): ")
-		fmt.Scanln(&attending)
+		if _, err := fmt.Scanln(&attending); err != nil {
+			fmt.Println("Error reading attendance:", err)
+			continue
+		}
 		willAttend := attending == "yes"
 
 		guest := &Rsvp{Name: name, Email: email, Phone: phone, willAttend: willAttend}
 		responses = append(responses, guest)
-
 	}
 
 	// fmt.Println("\n Final Guest List:")
@@ -54,7 +65,10 @@ func main() {
 
 	var searchName string
 	fmt.Print("\nSearch guest by name (or type 'exit'): ")
-	fmt.Scanln(&searchName)
+	if _, err := fmt.Scanln(&searchName); err != nil {
+		fmt.Println("Error reading search name:", err)
+		searchName = "exit" // Exit gracefully on error
+	}
 
 	if searchName != "exit" {
 		guest := findGuest(responses, searchName)
@@ -75,7 +89,6 @@ func main() {
 	fmt.Printf("\tTotalAlloc = %v MB\n", m.TotalAlloc/1024/1024)
 	fmt.Printf("\tSys = %v MB\n", m.Sys/1024/1024)
 	fmt.Printf("\tNumGC = %v\n", m.NumGC)
-
 }
 
 func countAttending(list []*Rsvp) (int, int) {
