@@ -1,11 +1,22 @@
 {{ define "body"}}
 
-<div class="text-center">
-    <h3>We're going to have an exciting party!</h3>
-    <h4>And YOU are invited!</h4>
-    <a class="btn btn-primary" href="/form">
-        RSVP Now
-    </a>
+<div class="hero-section">
+    <div class="win11-card">
+        <h1 class="hero-title">We're Going to Have an Exciting Party!</h1>
+        <p class="hero-subtitle">And YOU are invited!</p>
+        <p style="color: var(--win11-text-secondary); margin-bottom: var(--space-8); font-size: var(--font-size-base);">
+            Join us for an unforgettable evening filled with great food, amazing company, and wonderful memories. 
+            We can't wait to celebrate with you!
+        </p>
+        <a href="/form" class="btn btn-primary btn-lg">
+            RSVP Now
+        </a>
+        <div style="margin-top: var(--space-6);">
+            <a href="/list" style="color: var(--win11-text-secondary); font-size: var(--font-size-sm);">
+                View guest list
+            </a>
+        </div>
+    </div>
 </div>
 
 {{ end }}

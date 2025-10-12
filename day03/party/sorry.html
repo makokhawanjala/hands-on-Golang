@@ -1,11 +1,31 @@
 {{ define "body"}}
 
-<div class="text-center">
-    <h1>It won't be the same without you, {{ . }}!</h1>
-    <div>Sorry to hear that you can't make it, but thanks for letting us know.</div>
-    <div>
-        Click <a href="/list">here</a> to see who is coming,
-        just in case you change your mind.
+<div class="container-sm">
+    <div class="win11-card message-card">
+        <div class="message-icon info">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        </div>
+        
+        <h1>It Won't Be the Same Without You, {{ . }}!</h1>
+        
+        <p>We're sorry to hear that you can't make it, but we really appreciate you letting us know.</p>
+        
+        <p style="color: var(--win11-text-secondary);">
+            If your plans change, you're always welcome to join us! We'd love to see you there.
+        </p>
+        
+        <div style="margin-top: var(--space-8); display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <a href="/list" class="btn btn-primary">
+                See Who's Coming
+            </a>
+            <a href="/" class="btn btn-secondary">
+                Back to Home
+            </a>
+        </div>
     </div>
 </div>
 

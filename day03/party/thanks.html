@@ -1,9 +1,30 @@
 {{ define "body"}}
 
-<div class="text-center">
-    <h1>Thank you, {{ . }}!</h1>
-    <div> It's great that you're coming. The drinks are already in the fridge!</div>
-    <div>Click <a href="/list">here</a> to see who else is coming.</div>
+<div class="container-sm">
+    <div class="win11-card message-card">
+        <div class="message-icon success">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+        </div>
+        
+        <h1>Thank You, {{ . }}!</h1>
+        
+        <p>We're thrilled that you'll be joining us! The celebration won't be the same without you.</p>
+        
+        <p style="color: var(--win11-text-secondary);">
+            The drinks are already in the fridge and we're getting everything ready for an amazing time!
+        </p>
+        
+        <div style="margin-top: var(--space-8); display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <a href="/list" class="btn btn-primary">
+                See Who Else Is Coming
+            </a>
+            <a href="/" class="btn btn-secondary">
+                Back to Home
+            </a>
+        </div>
+    </div>
 </div>
 
 {{ end }}
