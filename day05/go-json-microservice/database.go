@@ -10,8 +10,8 @@ import (
 var db *sql.DB
 
 func initDB() {
-	connStr := "user=webuser password=webpass123 dbname=productdb sslmode=disable"
-	//connStr := "user=webuser dbname=personal_info_db sslmode=disable password=webpass123 host=localhost"
+	connStr := "user=yourusername password=yourpassword dbname=productdb sslmode=disable"
+	//connStr := "user=yourusername dbname=personal_info_db sslmode=disable password=yourpassword host=localhost"
 	var err error
 	db, err = sql.Open("postgres", connStr)
 	if err != nil {
