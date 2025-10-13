@@ -1,23 +1,50 @@
 {{ define "body"}}
 
-<div class="text-center p-2">
-    <h2>Here is the list of people attending the party</h2>
-    <table class="table table-bordered table-striped table-sm">
+<div class="win11-header">
+    <h2>Party Guest List</h2>
+    <p style="margin: 0; opacity: 0.9;">Here's everyone who's celebrating with us!</p>
+</div>
+
+<div class="table-container">
+    <!-- Search bar and stats will be dynamically added by JavaScript -->
+    
+    <table class="table table-striped">
         <thead>
-            <tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
         </thead>
         <tbody>
-            {{ range . }}
-                {{ if .WillAttend }}
-                    <tr>
-                        <td>{{ .Name }}</td>
-                        <td>{{ .Email }}</td>
-                        <td>{{ .Phone }}</td>
-                    </tr>
+            {{ if . }}
+                {{ range . }}
+                    {{ if .WillAttend }}
+                        <tr>
+                            <td data-label="Name">{{ .Name }}</td>
+                            <td data-label="Email">{{ .Email }}</td>
+                            <td data-label="Phone">{{ .Phone }}</td>
+                        </tr>
+                    {{ end }}
                 {{ end }}
+            {{ else }}
+                <tr>
+                    <td colspan="3" style="text-align: center; padding: var(--space-8); color: var(--win11-text-secondary);">
+                        No guests have RSVP'd yet. Be the first!
+                    </td>
+                </tr>
             {{ end }}
         </tbody>
     </table>
+</div>
+
+<div style="text-align: center; margin-top: var(--space-8);">
+    <a href="/form" class="btn btn-primary">
+        Add Your RSVP
+    </a>
+    <a href="/" class="btn btn-secondary" style="margin-left: var(--space-4);">
+        Back to Home
+    </a>
 </div>
 
 {{ end }}

@@ -1,42 +1,86 @@
 {{ define "body"}}
 
-<div class="h5 bg-primary text-white text-center m-2 p-2">RSVP</div>
+<div class="container-sm">
+    <div class="win11-header">
+        <h2>RSVP to Our Party</h2>
+        <p style="margin: 0; opacity: 0.9;">We'd love to know if you can join us!</p>
+    </div>
 
-{{ if gt (len .Errors) 0}}
-    <ul class="text-danger mt-3">
-        {{ range .Errors }}
-            <li>{{ . }}</li>
+    <div class="win11-card win11-card-flat">
+        {{ if gt (len .Errors) 0}}
+            <ul class="error-list">
+                {{ range .Errors }}
+                    <li>{{ . }}</li>
+                {{ end }}
+            </ul>
         {{ end }}
-    </ul>
-{{ end }}
 
-<form method="POST" class="m-2">
-    <div class="form-group my-1">
-        <label>Your name:</label>
-        <input name="name" class="form-control" value="{{.Name}}" />
+        <form method="POST">
+            <div class="form-group">
+                <label for="name" class="form-label">Your Name</label>
+                <input 
+                    type="text"
+                    id="name"
+                    name="name" 
+                    class="form-control" 
+                    value="{{.Name}}"
+                    placeholder="Enter your full name"
+                    autocomplete="name"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input 
+                    type="email"
+                    id="email"
+                    name="email" 
+                    class="form-control" 
+                    value="{{.Email}}"
+                    placeholder="your.email@example.com"
+                    autocomplete="email"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input 
+                    type="tel"
+                    id="phone"
+                    name="phone" 
+                    class="form-control" 
+                    value="{{.Phone}}"
+                    placeholder="+254701234567"
+                    autocomplete="tel"
+                    required
+                />
+            </div>
+
+            <div class="form-group">
+                <label for="willAttend" class="form-label">Will You Attend?</label>
+                <select name="willAttend" id="willAttend" class="form-select">
+                    <option value="true" {{if .WillAttend}}selected{{end}}>
+                        Yes, I'll be there!
+                    </option>
+                    <option value="false" {{if not .WillAttend}}selected{{end}}>
+                        No, I can't make it
+                    </option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary btn-lg" type="submit" style="width: 100%;">
+                Submit RSVP
+            </button>
+
+            <div style="text-align: center; margin-top: var(--space-6);">
+                <a href="/" style="color: var(--win11-text-secondary); font-size: var(--font-size-sm);">
+                    ← Back to home
+                </a>
+            </div>
+        </form>
     </div>
-    <div class="form-group my-1">
-        <label>Your email:</label>
-        <input name="email" class="form-control" value="{{.Email}}" />
-    </div>
-    <div class="form-group my-1">
-        <label>Your phone number:</label>
-        <input name="phone" class="form-control" value="{{.Phone}}" />
-    </div>
-    <div class="form-group my-1">
-        <label>Will you attend?:</label>
-        <select name="willAttend" class="form-select">
-            <option value="true" {{if .WillAttend}}selected{{end}}>
-                Yes, I'll be there
-            </option>
-            <option value="false" {{if not .WillAttend}}selected{{end}}>
-                No, I can't come
-            </option>
-        </select>
-    </div>
-    <button class="btn btn-primary mt-3" type="submit">
-        Submit RSVP
-    </button>
-</form>
+</div>
 
 {{ end }}
