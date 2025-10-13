@@ -1,5 +1,5 @@
 # STREAK
-Mark ✅ daily to avoid zero days.
+Mark daily to avoid zero days.
 
 | Day | Date | Shipped? | Notes |
 |-----|------|----------|-------|
