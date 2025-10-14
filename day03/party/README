@@ -1,0 +1,243 @@
+# 🎉 RSVP Party Application - Windows 11 Design
+
+A modern, professional RSVP application built with Go and styled with Windows 11 design principles.
+
+## ✨ Features
+
+### Backend
+- **SQLite Database** - Persistent data storage with automatic table creation
+- **Email Validation** - Regex-based email format checking
+- **Phone Validation** - Support for various phone formats
+- **Duplicate Prevention** - Unique email constraint
+- **Concurrency Safe** - Mutex-protected database operations
+- **Request Logging** - Comprehensive logging for debugging
+- **Health Checks** - Database connectivity monitoring
+
+### Frontend
+- **Windows 11 Design System** - Modern, clean UI with fluent design
+- **Real-time Validation** - Client-side form validation
+- **Search & Filter** - Dynamic guest list search
+- **Responsive Design** - Mobile-first approach
+- **Smooth Animations** - Fade-ins, transitions, and micro-interactions
+- **Accessibility** - Keyboard navigation and semantic HTML
+
+## 📋 Prerequisites
+
+- Go 1.21 or higher
+- GCC compiler (for SQLite)
+
+## 🚀 Local Development Setup
+
+### 1. Install Dependencies
+
+```bash
+go mod download
+```
+
+### 2. Run the Application
+
+```bash
+go run main.go
+```
+
+The application will start on `http://localhost:5000`
+
+### 3. File Structure
+
+```
+/
+├── main.go           # Backend application
+├── go.mod            # Go dependencies
+├── styles.css        # Windows 11 design system
+├── app.js            # Client-side JavaScript
+├── layout.html       # Base HTML template
+├── welcome.html      # Home page
+├── form.html         # RSVP form
+├── thanks.html       # Success page
+├── sorry.html        # Decline page
+├── list.html         # Guest list
+└── rsvp.db          # SQLite database (auto-created)
+```
+
+## 🌐 Railway Deployment
+
+### Prerequisites
+- Railway account (https://railway.app)
+- GitHub repository with your code
+
+### Deployment Steps
+
+1. **Push Code to GitHub**
+   ```bash
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+   ```
+
+2. **Create New Railway Project**
+   - Go to https://railway.app
+   - Click "New Project"
+   - Select "Deploy from GitHub repo"
+   - Choose your repository
+
+3. **Configure Build Settings**
+   Railway will auto-detect Go. No additional configuration needed!
+
+4. **Environment Variables**
+   - `PORT` is automatically set by Railway
+   - No additional variables needed
+
+5. **Deploy**
+   - Railway will automatically build and deploy
+   - Your app will be live at: `https://your-app.up.railway.app`
+
+### Important Notes for Railway
+
+- **Database Persistence**: The SQLite database file (`rsvp.db`) will persist between deployments using Railway's volumes
+- **Build Command**: Railway automatically runs `go build`
+- **Start Command**: Railway automatically runs the compiled binary
+- **Health Check**: The `/health` endpoint is available for monitoring
+
+## 🗄️ Database Schema
+
+```sql
+CREATE TABLE rsvps (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT NOT NULL,
+    will_attend BOOLEAN NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+## 🎨 Design System
+
+### Color Palette
+- **Primary**: `#0067C0` (Windows 11 Blue)
+- **Background**: `#F3F3F3` (Light Gray)
+- **Surface**: `#FFFFFF` (White)
+- **Text**: `#1F1F1F` (Almost Black)
+- **Success**: `#107C10` (Green)
+- **Error**: `#D13438` (Red)
+
+### Typography
+- **Font Family**: Segoe UI Variable, Segoe UI, system-ui
+- **Base Size**: 16px
+- **Scale**: 12px - 40px
+
+### Spacing
+- Based on 4px grid system
+- Consistent margins and padding
+
+## 🔧 Configuration
+
+### Change Port (Local Development)
+Edit `main.go`:
+```go
+port := "8080" // Change from 5000
+```
+
+### Database Location
+The SQLite database is created as `rsvp.db` in the application directory.
+
+To change the location, edit `main.go`:
+```go
+db, err = sql.Open("sqlite3", "./path/to/your/rsvp.db")
+```
+
+## 📱 Browser Support
+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## 🐛 Troubleshooting
+
+### SQLite Build Errors
+
+If you get CGO errors on Windows:
+```bash
+# Install GCC via MinGW or TDM-GCC
+# Or use this for Windows:
+go env -w CGO_ENABLED=1
+```
+
+On Linux/Mac, install build tools:
+```bash
+# Ubuntu/Debian
+sudo apt-get install build-essential
+
+# macOS
+xcode-select --install
+```
+
+### Database Locked Errors
+
+The application uses mutexes to prevent concurrent write issues. If you still encounter locks:
+1. Check if another process is accessing the database
+2. Restart the application
+3. Delete `rsvp.db` and let it recreate
+
+### Template Not Found
+
+Ensure all HTML files are in the same directory as `main.go`:
+```bash
+ls -la *.html
+# Should show: layout.html, welcome.html, form.html, thanks.html, sorry.html, list.html
+```
+
+## 📊 API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/` | GET | Home page |
+| `/form` | GET | RSVP form |
+| `/form` | POST | Submit RSVP |
+| `/list` | GET | Guest list |
+| `/thanks` | GET | Success page |
+| `/sorry` | GET | Decline page |
+| `/health` | GET | Health check |
+
+## 🔐 Security Features
+
+- XSS Protection (via Go's html/template)
+- SQL Injection Prevention (prepared statements)
+- Input Sanitization (trim whitespace)
+- Email uniqueness constraint
+- Phone number format validation
+
+## 🎯 Performance Optimizations
+
+- Connection pooling for database
+- Read/Write mutexes for concurrent access
+- Efficient template caching
+- Minimal JavaScript (vanilla JS, no frameworks)
+- Optimized CSS (no unused styles)
+
+## 📈 Future Enhancements
+
+Potential features to add:
+- [ ] Admin dashboard with authentication
+- [ ] Email notifications
+- [ ] CSV export of guest list
+- [ ] Edit/delete RSVP functionality
+- [ ] Dark mode toggle
+- [ ] Multi-event support
+- [ ] QR code generation for RSVPs
+- [ ] Guest +1 support
+- [ ] Dietary restrictions field
+
+## 📄 License
+
+This project is open source and available for personal and commercial use.
+
+## 🤝 Contributing
+
+Feel free to fork, modify, and improve this application!
+
+
+---
+
+**Built with ❤️ using Go and Windows 11 Design Principles**
