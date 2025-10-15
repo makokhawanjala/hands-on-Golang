@@ -1,5 +1,11 @@
-# Use the official Go image as base
+# Stage 1: Build with CGO enabled
 FROM golang:1.23-alpine AS builder
+
+# Install required build tools for CGO
+RUN apk add --no-cache gcc g++ make sqlite-dev
+
+# Enable CGO (required for go-sqlite3)
+ENV CGO_ENABLED=1 GOOS=linux GOARCH=amd64
 
 # Set working directory
 WORKDIR /app
@@ -7,38 +13,36 @@ WORKDIR /app
 # Copy source code
 COPY day03/party/ ./
 
-# Download dependencies (if any)
+# Download dependencies
 RUN go mod download
 
-# Build the application
+# Build the Go binary with SQLite support
 RUN go build -ldflags="-w -s" -o out .
 
-# Use a minimal image for the final stage
+# Stage 2: Minimal runtime image
 FROM alpine:latest
 
-# Install ca-certificates for HTTPS requests
-RUN apk --no-cache add ca-certificates
+# Install runtime dependencies (SQLite libs + SSL certs)
+RUN apk --no-cache add ca-certificates sqlite-libs
 
-# Create a non-root user
+# Create non-root user
 RUN adduser -D -s /bin/sh appuser
 
 # Set working directory
 WORKDIR /app
 
-# Copy the binary from builder stage
+# Copy compiled binary and static assets
 COPY --from=builder /app/out .
-
-# Copy static files (HTML templates)
 COPY --from=builder /app/*.html ./
+COPY --from=builder /app/styles.css ./
+COPY --from=builder /app/app.js ./
 
-# Change ownership to non-root user
+# Set permissions
 RUN chown -R appuser:appuser /app
-
-# Switch to non-root user
 USER appuser
 
-# Expose port (adjust if your app uses a different port)
+# Expose port 8080
 EXPOSE 8080
 
-# Run the application
+# Run the app
 CMD ["./out"]
