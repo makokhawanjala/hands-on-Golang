@@ -1,29 +1,20 @@
-# Go 30 Days — Amos Makokha
+# Go Caching Masterclass 🚀
 
-A focused 30-day journey to become fast and idiomatic with Go by building tiny tools daily and a Real‑Time POS Telemetry capstone.
+Hands-on learning journey through caching patterns in Go using Redis.
 
-## Structure
-```
-go-30days/
-  .github/workflows/ci.yml        # CI: lint, test, vuln check
-  day01/ ... day30/               # daily folders
-  capstone/                        # final project scaffold
-  pkg/                             # reusable helpers
-  scratch/                         # tiny experiments
-  AUTOPLAN.md                      # daily checklist
-  STREAK.md                        # streak tracker
-  NOTES.md                         # concept notes
-  LOG.md                           # daily reflections
-  Makefile                         # convenience tasks
-  go.mod                           # module
-```
-## Quick start
-```bash
-# run Day 1 example
-make run DAY=01
-# run all tests with race detector
-make test
-# lint (needs golangci-lint)
-make lint
-```
-Update the module path in `go.mod` after you create the GitHub repo if needed.
+## 📚 Projects
+
+### Project 1: Cache-Aside Pattern
+**Status:** In Progress
+**Goal:** Demonstrate Redis caching vs direct database access
+
+## 🛠️ Tech Stack
+- Go 1.25.1
+- Redis 7.x
+
+## 📝 Learning Progress
+- [ ] Project 1: Basic Cache-Aside Pattern
+- [ ] Project 2: Write-Through Cache
+- [ ] Project 3: Cache Invalidation Strategies
+- [ ] Project 4: Distributed Caching Patterns
+- [ ] Project 5: Multi-Layer Cache Architecture

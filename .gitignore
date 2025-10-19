@@ -1,11 +1,22 @@
-# Go
-bin/
-dist/
+# Binaries
 *.exe
+*.dll
+*.so
+*.dylib
 *.test
 *.out
-coverage*
+
+# Go workspace
+go.work
+
+# Dependencies
 vendor/
-.DS_Store
-.idea/
+
+# IDE
 .vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
